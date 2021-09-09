@@ -18,6 +18,7 @@ android {
     defaultConfig {
         minSdkVersion **MINSDKVERSION**
         targetSdkVersion **TARGETSDKVERSION**
+        multiDexEnabled true
         applicationId '**APPLICATIONID**'
         ndk {
             abiFilters **ABIFILTERS**
