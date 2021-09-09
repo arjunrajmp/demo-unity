@@ -34,12 +34,30 @@ public class Parallaxer : MonoBehaviour {
 	float targetAspect;
 	GameManager game;
 
+	public static bool isAdInitialized = false;
+
 	void Awake() {
 		Configure();
 	}
 
 	void Start() {
 		game = GameManager.Instance;
+		initAd();
+	}
+
+	void initAd(){
+		if(isAdInitialized){
+			return;
+		}
+		isAdInitialized = true;
+		#if UNITY_ANDROID
+        object[] initParams = new object[3];
+        AndroidJavaClass unityActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        initParams[0] = unityActivity.GetStatic<AndroidJavaObject>("currentActivity"); // Activity
+        initParams[1] = false ; // is debug
+		AndroidJavaClass adPumbClass = new AndroidJavaClass("com.adpumb.lifecycle.Adpumb");
+		adPumbClass.CallStatic("register", initParams);
+		#endif
 	}
 
 	void OnEnable() {

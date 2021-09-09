@@ -51,6 +51,22 @@ public class TapController : MonoBehaviour {
 	void OnGameOverConfirmed() {
 		transform.localPosition = startPos;
 		transform.rotation = Quaternion.identity;
+		showAd();
+	}
+
+	void showAd() {
+		#if UNITY_ANDROID
+		AndroidJavaClass InterstitialPlacementClass = new AndroidJavaClass("com.adpumb.ads.display.InterstitialPlacement");
+		AndroidJavaClass DisplayManagerClass = new AndroidJavaClass("com.adpumb.ads.display.DisplayManager");
+		AndroidJavaObject InterstitialPlacementObject =  new AndroidJavaObject("com.adpumb.ads.display.InterstitialPlacementBuilder")
+											.Call<AndroidJavaObject>("name", new object[] { "unity"} )
+											.Call<AndroidJavaObject>("showLoaderTillAdIsReady", new object[] { true } )
+											// .Call<AndroidJavaObject>("loaderTimeOutInSeconds", new object[] { 5 } )
+											// .Call<AndroidJavaObject>("frequencyCapInSeconds", new object[] { 1 } )
+											.Call<AndroidJavaObject>("build");
+		AndroidJavaObject DisplayManagerObject = DisplayManagerClass.CallStatic<AndroidJavaObject>("getInstance");
+		DisplayManagerObject.Call("showAd",InterstitialPlacementObject);
+		#endif
 	}
 
 	void Update() {
