@@ -5,7 +5,7 @@ using AdPumbPlugin;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class TapController : MonoBehaviour {
+public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 
 	public delegate void PlayerDelegate();
 	public static event PlayerDelegate OnPlayerDied;
@@ -59,9 +59,12 @@ public class TapController : MonoBehaviour {
 			.showLoaderTillAdIsReady(true)
 			.loaderTimeOutInSeconds(5)
 			.frequencyCapInSeconds(10)
+			.onAdCompletion( this )
 			.build();
 		DisplayManager.Instance.showAd(placementObject);
 	}
+
+	public void onAdCompletion(bool success){ Debug.Log(" Ad completed " ); }
 
 	void Update() {
 		if (game.GameOver) return;
