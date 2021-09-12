@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AdPumbPlugin;
 
 public class Parallaxer : MonoBehaviour {
 
@@ -40,6 +41,7 @@ public class Parallaxer : MonoBehaviour {
 
 	void Start() {
 		game = GameManager.Instance;
+		AdPumbPlugin.AdPumb.register(false);
 	}
 
 	void OnEnable() {
