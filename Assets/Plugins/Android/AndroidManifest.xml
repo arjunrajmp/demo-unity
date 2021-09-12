@@ -6,6 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <application>
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8387269509953097~8237075600" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="fb1135577820113294" />
+
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
                   android:theme="@style/UnityThemeSelector">
             <intent-filter>

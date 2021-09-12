@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AdPumbPlugin;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class TapController : MonoBehaviour {
+public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 
 	public delegate void PlayerDelegate();
 	public static event PlayerDelegate OnPlayerDied;
@@ -15,6 +17,8 @@ public class TapController : MonoBehaviour {
 	public AudioSource tapSound;
 	public AudioSource scoreSound;
 	public AudioSource dieSound;
+
+	private int adCount = 0;
 
 	Rigidbody2D rigidBody;
 	Quaternion downRotation;
@@ -51,7 +55,56 @@ public class TapController : MonoBehaviour {
 	void OnGameOverConfirmed() {
 		transform.localPosition = startPos;
 		transform.rotation = Quaternion.identity;
+		showAd();
 	}
+
+	void showAd(){
+		adCount++;
+		int adToLoad = adCount %3;
+		
+		switch (adToLoad) {
+			case 0:
+				Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 15 sec ");
+				LoaderSettings loader = new LoaderSettings();
+				loader.setLogoResID();
+				AndroidJavaObject placementObject1 = AdPlacementBuilder.Interstitial()
+					.name("unity_Interstitial_full")
+					.showLoaderTillAdIsReady(true)
+					.loaderTimeOutInSeconds(5)
+					.frequencyCapInSeconds(15)
+					.loaderUISetting(loader)
+					.onAdCompletion( this.onAdCompletion )
+					.build();
+				DisplayManager.Instance.showAd(placementObject1);
+				break;
+			case 1:
+				Toast.show("loading simple Interstitial ad  freq cap 15 sec ");
+				AndroidJavaObject placementObject2 = AdPlacementBuilder.Interstitial()
+					.name("unity_Interstitial_simple")
+					.frequencyCapInSeconds(15)
+					.build();
+				DisplayManager.Instance.showAd(placementObject2);
+				break;
+			case 2:
+				Toast.show("loading Reward ad");
+				AndroidJavaObject placementObject3 = AdPlacementBuilder.Rewarded()
+					.name("unity_Reward")
+					.loaderTimeOutInSeconds(5)
+					.onAdCompletion( this.onRewardAdCompletion )
+					.build();
+				DisplayManager.Instance.showAd(placementObject3);
+				break;
+			case 3:
+				// Native ad
+				break;
+		}
+
+
+	}
+
+	public void onAdCompletion(bool success){  Toast.show("Ad completed");  }
+
+	public void onRewardAdCompletion(bool success){  Toast.show("Reward Ad completed");  }
 
 	void Update() {
 		if (game.GameOver) return;
