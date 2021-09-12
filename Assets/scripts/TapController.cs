@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AdPumbPlugin;
+
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class TapController : MonoBehaviour {
@@ -51,6 +53,14 @@ public class TapController : MonoBehaviour {
 	void OnGameOverConfirmed() {
 		transform.localPosition = startPos;
 		transform.rotation = Quaternion.identity;
+		
+		AndroidJavaObject placementObject = AdPlacementBuilder.Interstitial()
+			.name("unity_game_over")
+			.showLoaderTillAdIsReady(true)
+			.loaderTimeOutInSeconds(5)
+			.frequencyCapInSeconds(10)
+			.build();
+		DisplayManager.Instance.showAd(placementObject);
 	}
 
 	void Update() {
