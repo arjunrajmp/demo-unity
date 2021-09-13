@@ -46,6 +46,9 @@ namespace AdPumbPlugin {
         public static AdPlacementBuilder Interstitial(){
             return new AdPlacementBuilder("InterstitialPlacementBuilder");
         }
+        public static AdPlacementBuilder Rewarded(){
+            return new AdPlacementBuilder("RewardedPlacementBuilder");
+        }
         public AdPlacementBuilder(string builderClassName ){
             #if UNITY_ANDROID
             PlacementBuilderObject = new AndroidJavaObject("com.adpumb.ads.display."+builderClassName);
