@@ -81,7 +81,7 @@ namespace AdPumbPlugin {
             #endif
             return this;
         }
-        public AdPlacementBuilder onAdCompletion(AdCompletion onAdCompletion){
+        public AdPlacementBuilder onAdCompletion(AdCompletionDelegate onAdCompletion){
             #if UNITY_ANDROID
             AdPumbPluginAdCompletionCallbackProxy obj = new AdPumbPluginAdCompletionCallbackProxy();
             obj.setCallback(onAdCompletion);
@@ -96,16 +96,17 @@ namespace AdPumbPlugin {
             return null;
         }
     }
+    public delegate void AdCompletionDelegate (bool success);
     class AdPumbPluginAdCompletionCallbackProxy : AndroidJavaProxy {
-        AdCompletion callback;
-        public void setCallback( AdCompletion callback2 ){
-            callback = callback2;
+        AdCompletionDelegate deligate;
+        public void setCallback( AdCompletionDelegate callback2 ){
+            deligate = callback2;
         }
         public AdPumbPluginAdCompletionCallbackProxy() : base("com.adpumb.ads.display.AdCompletion") { }
 
         public void onAdCompletion(bool success, AndroidJavaObject placementDisplayStatus) {
             Debug.Log(" AdPumbPluginAdCompletionCallbackProxy " );
-            callback.onAdCompletion(success);
+            deligate(success);
         }
     }
     public interface AdCompletion{

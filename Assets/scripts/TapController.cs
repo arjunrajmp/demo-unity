@@ -53,18 +53,19 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 	void OnGameOverConfirmed() {
 		transform.localPosition = startPos;
 		transform.rotation = Quaternion.identity;
+		Toast.show("loading Interstitial ad");
 		
 		AndroidJavaObject placementObject = AdPlacementBuilder.Interstitial()
 			.name("unity_game_over")
 			.showLoaderTillAdIsReady(true)
 			.loaderTimeOutInSeconds(5)
 			.frequencyCapInSeconds(10)
-			.onAdCompletion( this )
+			.onAdCompletion( this.onAdCompletion )
 			.build();
 		DisplayManager.Instance.showAd(placementObject);
 	}
 
-	public void onAdCompletion(bool success){ Debug.Log(" Ad completed " ); }
+	public void onAdCompletion(bool success){ Debug.Log(" Ad completed " ); Toast.show("Ad completed");  }
 
 	void Update() {
 		if (game.GameOver) return;
