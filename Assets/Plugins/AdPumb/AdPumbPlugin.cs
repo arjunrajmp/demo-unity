@@ -41,39 +41,39 @@ namespace AdPumbPlugin {
     }
     public class AdPlacementBuilder{
         #if UNITY_ANDROID
-        AndroidJavaObject PlacementObject;
+        AndroidJavaObject PlacementBuilderObject;
         #endif
         public static AdPlacementBuilder Interstitial(){
             return new AdPlacementBuilder("InterstitialPlacementBuilder");
         }
         public AdPlacementBuilder(string builderClassName ){
             #if UNITY_ANDROID
-            PlacementObject = new AndroidJavaObject("com.adpumb.ads.display."+builderClassName);
+            PlacementBuilderObject = new AndroidJavaObject("com.adpumb.ads.display."+builderClassName);
             #endif
         }
         public AdPlacementBuilder name(string name){
             #if UNITY_ANDROID
-            PlacementObject = PlacementObject.Call<AndroidJavaObject>("name", new object[] { name} );
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("name", new object[] { name} );
             #endif
             return this;
         }
         public AdPlacementBuilder showLoaderTillAdIsReady(bool showLoader){
             #if UNITY_ANDROID
-            PlacementObject = PlacementObject.Call<AndroidJavaObject>("showLoaderTillAdIsReady", new object[] { 
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("showLoaderTillAdIsReady", new object[] { 
                 new AndroidJavaObject("java.lang.Boolean",showLoader.ToString().ToLower()) } );
             #endif
             return this;
         }
         public AdPlacementBuilder loaderTimeOutInSeconds(long duration){
             #if UNITY_ANDROID
-            PlacementObject = PlacementObject.Call<AndroidJavaObject>("loaderTimeOutInSeconds", new object[] { 
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("loaderTimeOutInSeconds", new object[] { 
                 new AndroidJavaObject("java.lang.Long",""+duration) } );
             #endif
             return this;
         }
         public AdPlacementBuilder frequencyCapInSeconds(long duration){
             #if UNITY_ANDROID
-            PlacementObject = PlacementObject.Call<AndroidJavaObject>("frequencyCapInSeconds", new object[] { 
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("frequencyCapInSeconds", new object[] { 
                 new AndroidJavaObject("java.lang.Long",""+duration) } );
             #endif
             return this;
@@ -82,13 +82,13 @@ namespace AdPumbPlugin {
             #if UNITY_ANDROID
             AdPumbPluginAdCompletionCallbackProxy obj = new AdPumbPluginAdCompletionCallbackProxy();
             obj.setCallback(onAdCompletion);
-            PlacementObject = PlacementObject.Call<AndroidJavaObject>("onAdCompletion", new object[] { obj } );
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("onAdCompletion", new object[] { obj } );
             #endif
             return this;
         }
         public AndroidJavaObject build(){
             #if UNITY_ANDROID
-            return PlacementObject.Call<AndroidJavaObject>("build");
+            return PlacementBuilderObject.Call<AndroidJavaObject>("build");
             #endif
             return null;
         }
