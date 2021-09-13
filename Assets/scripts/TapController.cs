@@ -18,6 +18,8 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 	public AudioSource scoreSound;
 	public AudioSource dieSound;
 
+	private int adCount = 0;
+
 	Rigidbody2D rigidBody;
 	Quaternion downRotation;
 	Quaternion forwardRotation;
@@ -53,19 +55,35 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 	void OnGameOverConfirmed() {
 		transform.localPosition = startPos;
 		transform.rotation = Quaternion.identity;
-		Toast.show("loading Interstitial ad");
-		
-		AndroidJavaObject placementObject = AdPlacementBuilder.Interstitial()
-			.name("unity_game_over")
-			.showLoaderTillAdIsReady(true)
-			.loaderTimeOutInSeconds(5)
-			.frequencyCapInSeconds(10)
-			.onAdCompletion( this.onAdCompletion )
-			.build();
-		DisplayManager.Instance.showAd(placementObject);
+		showAd();
 	}
 
-	public void onAdCompletion(bool success){ Debug.Log(" Ad completed " ); Toast.show("Ad completed");  }
+	void showAd(){
+		adCount++;
+		if(adCount%2 == 1){
+			Toast.show("loading Interstitial ad");
+			AndroidJavaObject placementObject = AdPlacementBuilder.Interstitial()
+				.name("unity_game_over")
+				.showLoaderTillAdIsReady(true)
+				.loaderTimeOutInSeconds(5)
+				.frequencyCapInSeconds(10)
+				.onAdCompletion( this.onAdCompletion )
+				.build();
+			DisplayManager.Instance.showAd(placementObject);
+		} else {
+			Toast.show("loading Reward ad");
+			AndroidJavaObject placementObject = AdPlacementBuilder.Rewarded()
+				.name("unity_game_over")
+				.loaderTimeOutInSeconds(5)
+				.onAdCompletion( this.onRewardAdCompletion )
+				.build();
+			DisplayManager.Instance.showAd(placementObject);
+		}
+	}
+
+	public void onAdCompletion(bool success){  Toast.show("Ad completed");  }
+
+	public void onRewardAdCompletion(bool success){  Toast.show("Reward Ad completed");  }
 
 	void Update() {
 		if (game.GameOver) return;
