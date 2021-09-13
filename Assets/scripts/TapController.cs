@@ -60,25 +60,46 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 
 	void showAd(){
 		adCount++;
-		if(adCount%2 == 1){
-			Toast.show("loading Interstitial ad");
-			AndroidJavaObject placementObject = AdPlacementBuilder.Interstitial()
-				.name("unity_game_over")
-				.showLoaderTillAdIsReady(true)
-				.loaderTimeOutInSeconds(5)
-				.frequencyCapInSeconds(10)
-				.onAdCompletion( this.onAdCompletion )
-				.build();
-			DisplayManager.Instance.showAd(placementObject);
-		} else {
-			Toast.show("loading Reward ad");
-			AndroidJavaObject placementObject = AdPlacementBuilder.Rewarded()
-				.name("unity_game_over")
-				.loaderTimeOutInSeconds(5)
-				.onAdCompletion( this.onRewardAdCompletion )
-				.build();
-			DisplayManager.Instance.showAd(placementObject);
+		int adToLoad = adCount %3;
+		switch (adToLoad) {
+			case 0:
+				Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 15 sec ");
+				AndroidJavaObject placementObject1 = AdPlacementBuilder.Interstitial()
+					.name("unity_Interstitial_full")
+					.showLoaderTillAdIsReady(true)
+					.loaderTimeOutInSeconds(5)
+					.frequencyCapInSeconds(15)
+					.onAdCompletion( this.onAdCompletion )
+					.build();
+				DisplayManager.Instance.showAd(placementObject1);
+				break;
+			case 1:
+				Toast.show("loading simple Interstitial ad  freq cap 15 sec ");
+				AndroidJavaObject placementObject2 = AdPlacementBuilder.Interstitial()
+					.name("unity_Interstitial_simple")
+					.frequencyCapInSeconds(15)
+					.build();
+				DisplayManager.Instance.showAd(placementObject2);
+				break;
+			case 2:
+				Toast.show("loading Reward ad");
+				AndroidJavaObject placementObject3 = AdPlacementBuilder.Rewarded()
+					.name("unity_Reward")
+					.loaderTimeOutInSeconds(5)
+					.onAdCompletion( this.onRewardAdCompletion )
+					.build();
+				DisplayManager.Instance.showAd(placementObject3);
+				break;
+			case 3:
+			
+			
+				break;
+			case 4:
+			
+				break;
 		}
+
+
 	}
 
 	public void onAdCompletion(bool success){  Toast.show("Ad completed");  }
