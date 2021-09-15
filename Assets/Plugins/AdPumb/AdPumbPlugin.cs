@@ -6,15 +6,20 @@ namespace AdPumbPlugin {
 
     public sealed class AdPumb {
         private static bool isAdInitialized = false;
+        private static string unityActivityName = "com.unity3d.player.UnityPlayer";
+        public static string getUnityActivityName(){
+            return unityActivityName;
+        }
         public static void register(bool isDebug){
             if(isAdInitialized){
                 return;
             }
             isAdInitialized = true;
             #if UNITY_ANDROID
-            AndroidJavaClass unityActivity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaClass unityActivity = new AndroidJavaClass(getUnityActivityName());
             AndroidJavaClass adPumbClass = new AndroidJavaClass("com.adpumb.lifecycle.Adpumb");
             adPumbClass.CallStatic("register", new object[] { unityActivity.GetStatic<AndroidJavaObject>("currentActivity") , isDebug });
+            Debug.Log(" adpumb registered ");
             #endif
         }
     }
@@ -89,11 +94,37 @@ namespace AdPumbPlugin {
             #endif
             return this;
         }
+        public AdPlacementBuilder loaderUISetting(LoaderSettings loadersettings){
+            #if UNITY_ANDROID
+            PlacementBuilderObject = PlacementBuilderObject.Call<AndroidJavaObject>("loaderUISetting", new object[] { loadersettings.get() } );
+            #endif
+            return this;
+        }
         public AndroidJavaObject build(){
             #if UNITY_ANDROID
             return PlacementBuilderObject.Call<AndroidJavaObject>("build");
             #endif
             return null;
+        }
+    }
+    public class LoaderSettings{
+        AndroidJavaObject LoaderSettingsObject;
+        public LoaderSettings(){
+            #if UNITY_ANDROID
+            LoaderSettingsObject = new AndroidJavaObject("com.adpumb.ads.display.LoaderSettings") ;
+            #endif
+        }
+        public void setLogoResID(){
+            #if UNITY_ANDROID
+            AndroidJavaObject unityActivity = new AndroidJavaClass(AdPumb.getUnityActivityName()).GetStatic<AndroidJavaObject>("currentActivity") ;
+            string packageName = unityActivity.Call<string>("getPackageName");
+            AndroidJavaObject resource = unityActivity.Call<AndroidJavaObject>("getResources");
+            int app_icon = resource.Call<int>("getIdentifier", new object[] { "app_icon", "mipmap", packageName } );
+            LoaderSettingsObject.Call("setLogoResID",new object[] { new AndroidJavaObject("java.lang.Integer",""+app_icon)  } );
+            #endif
+        }
+        public AndroidJavaObject get(){
+            return LoaderSettingsObject;
         }
     }
     public delegate void AdCompletionDelegate (bool success);
