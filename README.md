@@ -96,7 +96,7 @@ DisplayManager.Instance.showAd(placementObject2);
 
 ```c#
 AndroidJavaObject placementObject3 = AdPlacementBuilder.Interstitial()
-        .name("ad_placement_name")    
+        .name("3rd_ad_placement_name")    
         .showLoaderTillAdIsReady(true)
         .loaderTimeOutInSeconds(5)
         .frequencyCapInSeconds(15)
@@ -121,7 +121,7 @@ public void onAdCompletion(bool success){
 LoaderSettings loader = new LoaderSettings();
 loader.setLogoResID(); // this will set loader logo to your app logo
 AndroidJavaObject placementObject4 = AdPlacementBuilder.Interstitial()
-            .name("unity_Interstitial_full")
+            .name("4th_ad_placement_name")
             .showLoaderTillAdIsReady(true)
             .loaderTimeOutInSeconds(5)
             .frequencyCapInSeconds(15)
