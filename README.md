@@ -20,7 +20,7 @@ You need to register with us before starting the integration. You can drop a mai
 
   
 
-1) Add your admob publisher id to the android-manifest.xml ( located in **Assets > Plugins > Android** ) of your app: Adpump doesn't use your admob adunits, however adpump uses the underlying admob APIs for which publisher id is mandatory. Even those admob accounts which are having ad limitation will work fine with Adpump.
+1) Add your admob publisher id to the android-manifest.xml ( located in **Assets > Plugins > Android** ) of your app: Adpump doesn't use your admob adunits, however adpump uses the underlying admob APIs for which publisher id is mandatory. 
 
 
 2) Add library dependency: Adpump is currently not hosted in maven central, hence you need to add the repository details to your gradle script to get the Adpump dependency resolved.
