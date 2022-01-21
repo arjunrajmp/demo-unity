@@ -49,25 +49,7 @@ implementation 'com.adpump:bidmachine:0.37'
 
 3) Create a Folder **AdPumb** in **Assets > Plugins** then create a C# Script file **AdPumbPlugin** and copy contents from With [**THIS FILE**](https://raw.githubusercontent.com/arjunrajmp/demo-unity/main/Assets/Plugins/AdPumb/AdPumbPlugin.cs),
 
-4) Register Adpump library: You should register Adpump at the entry point of your application. Adpump takes some time to load the advertisements, it's better to register as soon as possible.
-
-```c#
-using  UnityEngine;
-using  AdPumbPlugin;
-
-...................
-
-void  Start() {
-game = GameManager.Instance;
-AdPumbPlugin.AdPumb.register(false);
-
-.........................
-
-}
-
-```
-
-5) Create placement: Adpump is designed on the concept of placement rather than adunit. A placement is a predefined action sequence which ends up in showing an Ad. 
+4) Create placement: Adpump is designed on the concept of placement rather than adunit. A placement is a predefined action sequence which ends up in showing an Ad. 
 
 ```c#
 AndroidJavaObject placementObject1 = AdPlacementBuilder.Interstitial()
