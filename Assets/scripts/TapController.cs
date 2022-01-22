@@ -64,24 +64,24 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 		
 		switch (adToLoad) {
 			case 0:
-				Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 15 sec ");
+				Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 10 sec ");
 				LoaderSettings loader = new LoaderSettings();
 				loader.setLogoResID();
 				AndroidJavaObject placementObject1 = AdPlacementBuilder.Interstitial()
 					.name("unity_Interstitial_full")
 					.showLoaderTillAdIsReady(true)
 					.loaderTimeOutInSeconds(5)
-					.frequencyCapInSeconds(15)
+					.frequencyCapInSeconds(10)
 					.loaderUISetting(loader)
 					.onAdCompletion( this.onAdCompletion )
 					.build();
 				DisplayManager.Instance.showAd(placementObject1);
 				break;
 			case 1:
-				Toast.show("loading simple Interstitial ad  freq cap 15 sec ");
+				Toast.show("loading simple Interstitial ad  freq cap 10 sec ");
 				AndroidJavaObject placementObject2 = AdPlacementBuilder.Interstitial()
 					.name("unity_Interstitial_simple")
-					.frequencyCapInSeconds(15)
+					.frequencyCapInSeconds(10)
 					.build();
 				DisplayManager.Instance.showAd(placementObject2);
 				break;
