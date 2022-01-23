@@ -3,101 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdPumbPlugin {
-    public class RequestConfiguration{
-        #if UNITY_ANDROID
-        AndroidJavaObject AdPumbConfigurationBuilderObject = new AndroidJavaObject("com.google.android.gms.ads.RequestConfiguration.Builder");
-        #endif
-        public RequestConfiguration setTestDeviceIds(object[] deviceIds){
-            #if UNITY_ANDROID
-            if(deviceIds.Length>0){
-                AndroidJavaClass ArraysClass  = new AndroidJavaClass("java.util.Arrays");
-                AdPumbConfigurationBuilderObject.Call("setTestDeviceIds", new object[] { ArraysClass.CallStatic<AndroidJavaObject>("asList",deviceIds) } );
-            }
-            #endif
-            return this;
-        }
-        public AndroidJavaObject build(){
-            #if UNITY_ANDROID
-            return AdPumbConfigurationBuilderObject.Call<AndroidJavaObject>("build");
-            #endif
-            return null;
-        }
-    }
-    public class AdPumbConfiguration{
-        public static string LOG_LEVEL_NONE = "NONE";
-        public static string LOG_LEVEL_TRACE = "TRACE";
-        #if UNITY_ANDROID
-        AndroidJavaObject AdPumbConfigurationObject = null ;
-        AndroidJavaObject currentActivity = null ;
-        #endif
-        // AdPumbConfiguration(){
-        //     initApp("com.unity3d.player.UnityPlayer");
-        // }
-        // AdPumbConfiguration(string mainActivityName){
-        //     initApp(mainActivityName);
-        // }
-        public AdPumbConfiguration setActivity(string mainActivityName){
-            #if UNITY_ANDROID
-            currentActivity = new AndroidJavaClass(mainActivityName).GetStatic<AndroidJavaObject>("currentActivity");
-            AdPumbConfigurationObject = new AndroidJavaObject("com.adpumb.lifecycle.AdPumbConfiguration",new object[]{ currentActivity });
-            #endif
-            return this;
-        }
-        public AndroidJavaObject getActivity(){
-            #if UNITY_ANDROID
-            return currentActivity;
-            #endif
-            return null;
-        }
-        public AdPumbConfiguration setDebugMode(bool isDebug){
-            #if UNITY_ANDROID
-            AdPumbConfigurationObject.Call<AndroidJavaObject>("setDebugMode",new object[]{
-                new AndroidJavaObject("java.lang.Boolean",isDebug.ToString().ToLower()) 
-            });
-            #endif
-            return this;
-        }
-        public AdPumbConfiguration addRequestConfiguration(RequestConfiguration requestConfiguration){ // TODO: proxy class for RequestConfiguration
-            #if UNITY_ANDROID
-            AdPumbConfigurationObject.Call<AndroidJavaObject>("addRequestConfiguration",new object[]{ requestConfiguration.build() });
-            #endif
-            return this;
-        }
-        public AdPumbConfiguration setLogLvl(string logLevel){
-            #if UNITY_ANDROID
-            AndroidJavaClass logLvlEnum = new    AndroidJavaClass("com.adpumb.lifecycle.AdPumbLogLvl");
-            AndroidJavaObject logLvl = logLvlEnum.GetStatic<AndroidJavaObject>(logLevel);
-            AdPumbConfigurationObject.Call("setLogLvl",new object[]{ logLvl });
-            #endif
-            return this;
-        }
-        public AndroidJavaObject build(){
-            #if UNITY_ANDROID
-            return AdPumbConfigurationObject;
-            #endif
-            return null;
-        }
-    }
-
-    public sealed class AdPumb {
-        private static bool isAdInitialized = false;
-        private static AndroidJavaObject currentActivity;
-        public static AndroidJavaObject getCurrentActivity(){
-            return currentActivity;
-        }
-        public static void register(AdPumbConfiguration adPumbConfiguration){
-            if(isAdInitialized){
-                return;
-            }
-            isAdInitialized = true;
-            #if UNITY_ANDROID
-            AdPumb.currentActivity = adPumbConfiguration.getActivity();
-            AndroidJavaClass adPumbClass = new AndroidJavaClass("com.adpumb.lifecycle.Adpumb");
-            adPumbClass.CallStatic("register", new object[] { adPumbConfiguration.build() });
-            Debug.Log(" adpumb registered ");
-            #endif
-        }
-    }
     public class DisplayManager{
         private static readonly DisplayManager instance = new DisplayManager();
         #if UNITY_ANDROID
@@ -113,9 +18,9 @@ namespace AdPumbPlugin {
             // DisplayManagerClass = new AndroidJavaClass("com.adpumb.ads.display.DisplayManager");
             #endif
         }
-        public void showAd(AndroidJavaObject PlacementObject){
+        public void showAd(AdPlacementBuilder placementBuilder){
             #if UNITY_ANDROID
-            DisplayManagerClass.CallStatic<AndroidJavaObject>("getInstance").Call("showAd",PlacementObject);
+            DisplayManagerClass.CallStatic<AndroidJavaObject>("getInstance").Call("showAd",placementBuilder.build());
             #endif
         }
     }
@@ -189,9 +94,9 @@ namespace AdPumbPlugin {
             LoaderSettingsObject = new AndroidJavaObject("com.adpumb.ads.display.LoaderSettings") ;
             #endif
         }
-        public void setLogoResID(){
+        public void setLogoResID(string activityName){
             #if UNITY_ANDROID
-            AndroidJavaObject unityActivity = AdPumb.getCurrentActivity(); ////
+            AndroidJavaObject unityActivity = new AndroidJavaClass(activityName).GetStatic<AndroidJavaObject>("currentActivity"); ////
             string packageName = unityActivity.Call<string>("getPackageName");
             AndroidJavaObject resource = unityActivity.Call<AndroidJavaObject>("getResources");
             int app_icon = resource.Call<int>("getIdentifier", new object[] { "app_icon", "mipmap", packageName } );

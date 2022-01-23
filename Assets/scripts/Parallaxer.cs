@@ -41,12 +41,6 @@ public class Parallaxer : MonoBehaviour {
 
 	void Start() {
 		game = GameManager.Instance;
-		
-		AdPumb.register(new AdPumbConfiguration()
-					.setActivity("com.unity3d.player.UnityPlayer")
-					.addRequestConfiguration(new RequestConfiguration().setTestDeviceIds(new object[]{ "216AF6722CC1339129A6640FF2285B3E" }))
-					.setLogLvl(AdPumbConfiguration.LOG_LEVEL_TRACE)
-				);
 	}
 
 	void OnEnable() {
