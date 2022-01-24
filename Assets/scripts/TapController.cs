@@ -60,31 +60,31 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 
 	void showAd(){
 		adCount++;
-		int adToLoad = adCount %3;
+		int adToLoad = adCount %2;
 		
 		switch (adToLoad) {
 			case 0:
-				Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 5 sec ");
+				//Toast.show("loading Interstitial ad with custom loader and onCompletion  freq cap 5 sec ");
 				LoaderSettings loader = new LoaderSettings();
 				loader.setLogoResID("com.unity3d.player.UnityPlayer");
 				AdPlacementBuilder placement = AdPlacementBuilder.Interstitial()
 					.name("unity_Interstitial_full")
 					.showLoaderTillAdIsReady(true)
 					.loaderTimeOutInSeconds(5)
-					.frequencyCapInSeconds(5)
+					.frequencyCapInSeconds(1)
 					.loaderUISetting(loader)
 					.onAdCompletion( this.onAdCompletion );
 				DisplayManager.Instance.showAd(placement);
 				break;
 			case 1:
-				Toast.show("loading simple Interstitial ad  freq cap 5 sec ");
+				//Toast.show("loading simple Interstitial ad  freq cap 5 sec ");
 				AdPlacementBuilder placement2 = AdPlacementBuilder.Interstitial()
 					.name("unity_Interstitial_simple")
-					.frequencyCapInSeconds(5);
+					.frequencyCapInSeconds(1);
 				DisplayManager.Instance.showAd(placement2);
 				break;
 			case 2:
-				Toast.show("loading Reward ad");
+				//Toast.show("loading Reward ad");
 				AdPlacementBuilder placement3 = AdPlacementBuilder.Rewarded()
 					.name("unity_Reward")
 					.loaderTimeOutInSeconds(5)
@@ -99,9 +99,13 @@ public class TapController : MonoBehaviour , AdPumbPlugin.AdCompletion {
 
 	}
 
-	public void onAdCompletion(bool success){  Toast.show("Ad completed");  }
+	public void onAdCompletion(bool success){  
+		//Toast.show("Ad completed");  
+	}
 
-	public void onRewardAdCompletion(bool success){  Toast.show("Reward Ad completed");  }
+	public void onRewardAdCompletion(bool success){  
+		//Toast.show("Reward Ad completed");  
+	}
 
 	void Update() {
 		if (game.GameOver) return;
